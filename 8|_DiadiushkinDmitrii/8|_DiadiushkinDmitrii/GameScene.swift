@@ -19,6 +19,7 @@ struct CollisionCategory {
 class GameScene: SKScene {
     
     var snake: Snake?
+    var app: Apple?
     
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
@@ -64,6 +65,16 @@ class GameScene: SKScene {
         
         let apple = Apple(position: CGPoint(x: randX, y: randY))
         self.addChild(apple)
+        app = apple
+    }
+    
+    func restartGame() {
+        snake!.removeFromParent()
+        app!.removeFromParent()
+        createApple()
+        snake = Snake(atPoint: CGPoint(x: scene!.frame.midX, y: scene!.frame.midY))
+        self.addChild(snake!)
+        sleep(1)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -119,8 +130,7 @@ extension GameScene: SKPhysicsContactDelegate {
             createApple()
         case CollisionCategory.EdgeBody:
             //homework
-            print("Some shit happend")
-            break
+            restartGame()
         default:
             break
         }
